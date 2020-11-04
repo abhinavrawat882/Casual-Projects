@@ -22,139 +22,166 @@ int bset[4][4];
 // second index will tell start and end points of that colour respectively and it will also tell that the no of buttons opened and no of button won
 
 int nop;
-int diceroler(int i)
-{
-    int diceNo[6] = {1, 2, 3, 4, 5, 6};
 
-    for (int btNo = 0; btNo < 4; btNo++)
+//***********************
+//diceroler Discription//
+//***********************
+// well this function simply rolls the dice
+// it needs to make sure that when it roles dice it should do it in a manner so that no two buttons of same colour should overlap
+
+int diceroler(int playerId)
+{ // below discription is how to implement that above goal.
+
+    //declaring this array does help us keep track of how many of these no's are usable.
+    int diceNo[6] = {1, 2, 3, 4, 5, 6};
+    int buttonsRemaining = 6;
+
+    //first comes the elemination process in which we will eliminate all the possible outcomes that will cause an overlap
+    //it will go button by button and thenmake them move using btmover projection mode that will return the position of the dice after a move
+    // then we will compare it to the position of other buttons...
+    // if an overlapting is found the move will be eliminated
+    for (int btNo = 0; btNo < 3; btNo++)
     {
-        for (int step = 1; step <= 6; step++)
+        for (int step = 0; step < 6; step++)
         {
-            int position = bt[btNo][i][0] + step;
-            if (position > bset[i][1])
+            if (diceNo[step] != 0)
             {
-                break;
-            }
-            else if (position != sp1 && position != sp2 && position != sp3 && position != sp4 && position != sp5 && position != 6 && position != sp7 && position != sp8)
-            {
-                // fill in the values of sp(safe spots) later
-                for (int tbtNo = 0; tbtNo < 4; tbtNo++)
+                int pos = btmover(playerId, btNo, step + 1, 1);
+                if (pos is equal to any safespot)
                 {
-                    if (btNo != tbtNo && position == [tbtNo][i][0])
+                    for (int tbt = btNo + 1; tbt < 4; tbt++)
                     {
-                        diceNo[step - 1] = 0;
-                        break;
+                        if (pos == bt[tbt][playerId][0])
+                        {
+                            diceNo[step] = 0;
+                            buttonsRemaining--;
+                            break;
+                        }
                     }
                 }
             }
         }
     }
+    int num = (rand() % (buttonsRemaining - 1 + 1)) + 1;// this will get is a random value 
+    int temp=0;
+    for(int i=0;i<6;i++){
+        if(diceNo[i]!=0){
+            
+            if(++temp==num){
+                return diceNo[i];
+            }
+        }
 
+    }
     return 6;
 }
 
-
-
-void btmover(int playerId,int lastButtonIdentifier,int nom){
-
+int btmover(int playerId, int lastButtonIdentifier, int nom, int mode)
+{
+    return 0;
 }
 
-///checkCurrent Discriptionne 
-    //this function does 2 things
-    //check how many players can move
-        //if none can move it will return -1 indicating to skip the player
-        //if only one can move function will automatically move the player
-            // if tht moved button cuts another button or wins then extra dice roll is awarded
-            // it returns 0 for moved chance 
-            // 2 for extra dice roll
-        // if many buttons can move then 1 is returned so that player can choose which button to move
-        
+///checkCurrent Discriptionne
+//this function does 2 things
+//check how many players can move
+//if none can move it will return -1 indicating to skip the player
+//if only one can move function will automatically move the player
+// if tht moved button cuts another button or wins then extra dice roll is awarded
+// it returns 0 for moved chance
+// 2 for extra dice roll
+// if many buttons can move then 1 is returned so that player can choose which button to move
 
-int checkCurrent(int playerId,int nom){
-    int noOfButtonsThatMove=0;
-    int lastButtonIdentifier=0;
-        
-        //if((buttonIsNotOpen && nom==6)||(buttonIsOpen && buttonPosition+nom<buttonEnd+5)){
-        
-        //button 1
-        if((bt[0][playerId][1]==-1&& nom==6)||(bt[0][playerId][1]==1 && bt[0][playerId][0]+nom<=bset[playerId][1]+5)){
+int checkCurrent(int playerId, int nom)
+{
+    int noOfButtonsThatMove = 0;
+    int lastButtonIdentifier = 0;
 
-            noOfButtonsThatMove++;
-            lastButtonIdentifier=0;
-        }
+    //if((buttonIsNotOpen && nom==6)||(buttonIsOpen && buttonPosition+nom<buttonEnd+5)){
 
-        //button 2
-        if((bt[1][playerId][1]==-1&& nom==6)||(bt[1][playerId][1]==1 && bt[1][playerId][0]+nom<=bset[playerId][1]+5)){
-            noOfButtonsThatMove++;
-            lastButtonIdentifier=1;
-        }
+    //button 1
+    if ((bt[0][playerId][1] == -1 && nom == 6) || (bt[0][playerId][1] == 1 && bt[0][playerId][0] + nom <= bset[playerId][1] + 5))
+    {
 
-        //button 3
-        if((bt[2][playerId][1]==-1&& nom==6)||(bt[2][playerId][1]==1 && bt[2][playerId][0]+nom<=bset[playerId][1]+5)){
-            noOfButtonsThatMove++;
-            lastButtonIdentifier=2;
-        }
+        noOfButtonsThatMove++;
+        lastButtonIdentifier = 0;
+    }
 
-        //button 4
-        if((bt[3][playerId][1]==-1&& nom==6)||(bt[3][playerId][1]==1 && bt[3][playerId][0]+nom<=bset[playerId][1]+5)){
-            noOfButtonsThatMove++;
-            lastButtonIdentifier=3;
-        }
-        
-        //check how many buttons are movable
-        
-        if(noOfButtonsThatMove==0){
-            return -1;
-        }
-        else if(noOfButtonsThatMove==1){
-            isCut=btmover(playerId,lastButtonIdentifier,nom);//make this function
-            if(isCut==1){
-                return 2;
-            }
-            return 0;
-        }
-        else{
-            return 1;
-        }
-        
+    //button 2
+    if ((bt[1][playerId][1] == -1 && nom == 6) || (bt[1][playerId][1] == 1 && bt[1][playerId][0] + nom <= bset[playerId][1] + 5))
+    {
+        noOfButtonsThatMove++;
+        lastButtonIdentifier = 1;
+    }
 
-            
+    //button 3
+    if ((bt[2][playerId][1] == -1 && nom == 6) || (bt[2][playerId][1] == 1 && bt[2][playerId][0] + nom <= bset[playerId][1] + 5))
+    {
+        noOfButtonsThatMove++;
+        lastButtonIdentifier = 2;
+    }
+
+    //button 4
+    if ((bt[3][playerId][1] == -1 && nom == 6) || (bt[3][playerId][1] == 1 && bt[3][playerId][0] + nom <= bset[playerId][1] + 5))
+    {
+        noOfButtonsThatMove++;
+        lastButtonIdentifier = 3;
+    }
+
+    //check how many buttons are movable
+
+    if (noOfButtonsThatMove == 0)
+    {
+        return -1;
+    }
+    else if (noOfButtonsThatMove == 1)
+    {
+        int isCut = btmover(playerId, lastButtonIdentifier, nom, 1); //make this function
+        if (isCut == 1)
+        {
+            return 2;
+        }
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
 }
 
-
-void diceMover(int i, int nom)
-{  // struct node{
-   //     int move_value;
-   //     struct node* next;
-   // };
+void intermediator(int i, int nom)
+{ // struct node{
+    //     int move_value;
+    //     struct node* next;
+    // };
 
     //struct node* head=(struct node*)malloc(sizeof(struct node));
     //head->move_value=nom;
-   // head->next=NULL;
+    // head->next=NULL;
     //struct node* end=head;
-    int availableMoves=0;
-    if(nom==6){
-        availableMoves=1;
+    int availableMoves = 0;
+    if (nom == 6)
+    {
+        availableMoves = 1;
     }
-    
+
     while (1 == 1)
-    {   int availableMoves=0;
-        if(nom)
-        char cmd;
-        while (1 == 1)
-        {   printf("%s :/ ", pn[i]);
-            scanf("%c", &cmd);
-            switch (cmd){
+    {
+        int availableMoves = 0;
+        if (nom)
+
+            while (1 == 1)
+            {
+                char cmd = 'd';
+                printf("%s :/ ", pn[i]);
+                scanf("%c", &cmd);
+                switch (cmd)
+                {
                 case 'd':
                     //if(end->move_value==6){
-                    
-                    nom+=diceroler(i);
-                        
 
-
-                    
+                    nom += diceroler(i);
+                }
             }
-        }
     }
 }
 void gamerunner()
@@ -173,7 +200,7 @@ void gamerunner()
                 nom = diceroler(i); // make this function later
                 if (nom != -1)
                 {
-                    diceMover(i, nom);
+                    intermediator(i, nom);
                 }
             }
         }
