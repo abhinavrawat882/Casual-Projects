@@ -13,7 +13,7 @@ int bt[4][4][2];
 // property=0 will tell the index of the path which will tell the location of player button on screen
 // property=1 will tell wheater the button is even open closed or has
 // -1 is not opened
-// i means opened
+// 1 means opened
 // 2 means win
 
 int bset[4][4];
@@ -52,29 +52,107 @@ int diceroler(int i)
 
     return 6;
 }
+
+
+
+void btmover(int playerId,int lastButtonIdentifier,int nom){
+
+}
+
+///checkCurrent Discriptionne 
+    //this function does 2 things
+    //check how many players can move
+        //if none can move it will return -1 indicating to skip the player
+        //if only one can move function will automatically move the player
+            // if tht moved button cuts another button or wins then extra dice roll is awarded
+            // it returns 0 for moved chance 
+            // 2 for extra dice roll
+        // if many buttons can move then 1 is returned so that player can choose which button to move
+        
+
+int checkCurrent(int playerId,int nom){
+    int noOfButtonsThatMove=0;
+    int lastButtonIdentifier=0;
+        
+        //if((buttonIsNotOpen && nom==6)||(buttonIsOpen && buttonPosition+nom<buttonEnd+5)){
+        
+        //button 1
+        if((bt[0][playerId][1]==-1&& nom==6)||(bt[0][playerId][1]==1 && bt[0][playerId][0]+nom<=bset[playerId][1]+5)){
+
+            noOfButtonsThatMove++;
+            lastButtonIdentifier=0;
+        }
+
+        //button 2
+        if((bt[1][playerId][1]==-1&& nom==6)||(bt[1][playerId][1]==1 && bt[1][playerId][0]+nom<=bset[playerId][1]+5)){
+            noOfButtonsThatMove++;
+            lastButtonIdentifier=1;
+        }
+
+        //button 3
+        if((bt[2][playerId][1]==-1&& nom==6)||(bt[2][playerId][1]==1 && bt[2][playerId][0]+nom<=bset[playerId][1]+5)){
+            noOfButtonsThatMove++;
+            lastButtonIdentifier=2;
+        }
+
+        //button 4
+        if((bt[3][playerId][1]==-1&& nom==6)||(bt[3][playerId][1]==1 && bt[3][playerId][0]+nom<=bset[playerId][1]+5)){
+            noOfButtonsThatMove++;
+            lastButtonIdentifier=3;
+        }
+        
+        //check how many buttons are movable
+        
+        if(noOfButtonsThatMove==0){
+            return -1;
+        }
+        else if(noOfButtonsThatMove==1){
+            isCut=btmover(playerId,lastButtonIdentifier,nom);//make this function
+            if(isCut==1){
+                return 2;
+            }
+            return 0;
+        }
+        else{
+            return 1;
+        }
+        
+
+            
+}
+
+
 void diceMover(int i, int nom)
-{   struct node{
-        int move_value;
-        struct node* next;
-    };
-    struct node* head=(struct node*)malloc(sizeof(struct node));
-    head->move_value=nom;
-    head->next=NULL;
-    struct node* end=head;
+{  // struct node{
+   //     int move_value;
+   //     struct node* next;
+   // };
+
+    //struct node* head=(struct node*)malloc(sizeof(struct node));
+    //head->move_value=nom;
+   // head->next=NULL;
+    //struct node* end=head;
+    int availableMoves=0;
+    if(nom==6){
+        availableMoves=1;
+    }
+    
     while (1 == 1)
-    {
-        printf("%s :/ ", pn[i]);
+    {   int availableMoves=0;
+        if(nom)
         char cmd;
         while (1 == 1)
-        {
+        {   printf("%s :/ ", pn[i]);
             scanf("%c", &cmd);
             switch (cmd){
                 case 'd':
-                    if(end->move_value==6){
+                    //if(end->move_value==6){
+                    
+                    nom+=diceroler(i);
                         
 
 
-                    }
+                    
             }
         }
     }
