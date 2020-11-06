@@ -62,23 +62,114 @@ int diceroler(int playerId)
             }
         }
     }
-    int num = (rand() % (buttonsRemaining - 1 + 1)) + 1;// this will get is a random value 
-    int temp=0;
-    for(int i=0;i<6;i++){
-        if(diceNo[i]!=0){
-            
-            if(++temp==num){
+    int num = (rand() % (buttonsRemaining - 1 + 1)) + 1; // this will get is a random value
+    int temp = 0;
+    for (int i = 0; i < 6; i++)
+    {
+        if (diceNo[i] != 0)
+        {
+
+            if (++temp == num)
+            {
                 return diceNo[i];
             }
         }
-
     }
     return 6;
 }
 
-int btmover(int playerId, int lastButtonIdentifier, int nom, int mode)
+//*******************
+//btmover DISCRIPTION
+//*******************
+//it's task is to move a button
+// there are 2 modes to this fuction
+// mode ==1 means move the button
+// mode ==2 means project the position of button after moving
+
+//RETURN POLICY:
+//
+int btmover(int playerId, int ButtonIdentifier, int nom, int mode)
 {
-    return 0;
+    if (bt[ButtonIdentifier][playerId][1] != 2)
+    {
+
+        int pos = bt[ButtonIdentifier][playerId][0];
+        if (pos < 0)
+        {
+            if (nom == 6)
+            {
+                bt[ButtonIdentifier][playerId][0] = bset[playerId][0];
+                bset[playerId][3] -= 1;
+                return 0;
+            }
+
+            return -1;
+        }
+
+        else if (pos >= 100)
+        {
+            pos += nom;
+            if (pos > 105)
+            {
+                return -1;
+            }
+
+            bt[ButtonIdentifier][playerId][0] += nom;
+            if (pos == 105)
+            {
+                bset[playerId][2] += 1;
+                return 2;
+            }
+
+            return 0;
+        }
+        else
+        {
+            int x = pos + nom;
+            if (x > bset[playerId][1])
+            {
+                pos = x - bset[playerId][1];
+                if (pos == 6)
+                {
+                    return -1;
+                }
+                bt[ButtonIdentifier][playerId][0] = 100 + pos;
+                if (pos == 5)
+                {
+                    bset[playerId][2] += 1;
+                    return 2;
+                }
+                return 0;
+            }
+            bt[ButtonIdentifier][playerId][0] += nom;
+            if (bt[ButtonIdentifier][playerId][0] >= 45)
+            {
+                bt[ButtonIdentifier][playerId][0] -= 45;
+            }
+            if (x != safespace)
+            {
+                for (int checkplayer = 0; checkplayer < 4; checkplayer++)
+                {
+                    if (checkplayer != playerId)
+                    {
+
+                        for (int justA = 0; justA < 4; justA++)
+                        {
+                            if (bt[justA][checkplayer][0] == bt[ButtonIdentifier][playerId][0])
+                            {
+                                bt[justA][checkplayer][0] = -1;
+                                bset[checkplayer][3] += 1;
+                                return 2;
+                            }
+                        }
+                    }
+                }
+            }
+            return 1;
+        }
+    }
+
+    return -1;
 }
 
 ///checkCurrent Discriptionne
@@ -99,9 +190,8 @@ int checkCurrent(int playerId, int nom)
     //if((buttonIsNotOpen && nom==6)||(buttonIsOpen && buttonPosition+nom<buttonEnd+5)){
 
     //button 1
-    if ((bt[0][playerId][1] == -1 && nom == 6) || (bt[0][playerId][1] == 1 && bt[0][playerId][0] + nom <= bset[playerId][1] + 5))
+    if (((bt[0][playerId][1] == -1 && nom == 6) || (bt[0][playerId][1] == 1 && bt[0][playerId][0] + nom <= bset[playerId][1] + 5))
     {
-
         noOfButtonsThatMove++;
         lastButtonIdentifier = 0;
     }
