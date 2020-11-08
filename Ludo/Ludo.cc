@@ -47,7 +47,7 @@ int diceroler(int playerId)
             if (diceNo[step] != 0)
             {
                 int pos = btmover(playerId, btNo, step + 1, 1);
-                if (pos is equal to any safespot)
+                if (pos != 0 && pos != 6 && pos != 11 && pos != 17 && pos != 22 && pos != 28 && pos != 33 && pos != 39)
                 {
                     for (int tbt = btNo + 1; tbt < 4; tbt++)
                     {
@@ -146,7 +146,7 @@ int btmover(int playerId, int ButtonIdentifier, int nom, int mode)
             {
                 bt[ButtonIdentifier][playerId][0] -= 45;
             }
-            if (x != safespace)
+            if (x != 0 && x != 6 && x != 11 && x != 17 && x != 22 && x != 28 && x != 33 && x != 39)
             {
                 for (int checkplayer = 0; checkplayer < 4; checkplayer++)
                 {
@@ -190,7 +190,7 @@ int checkCurrent(int playerId, int nom)
     //if((buttonIsNotOpen && nom==6)||(buttonIsOpen && buttonPosition+nom<buttonEnd+5)){
 
     //button 1
-    if (((bt[0][playerId][1] == -1 && nom == 6) || (bt[0][playerId][1] == 1 && bt[0][playerId][0] + nom <= bset[playerId][1] + 5))
+    if (((bt[0][playerId][1] == -1 && nom == 6) || (bt[0][playerId][1] == 1 && bt[0][playerId][0] + nom <= bset[playerId][1] + 5)))
     {
         noOfButtonsThatMove++;
         lastButtonIdentifier = 0;
@@ -236,18 +236,11 @@ int checkCurrent(int playerId, int nom)
     {
         return 1;
     }
+    return 0;
 }
 
 void intermediator(int i, int nom)
-{ // struct node{
-    //     int move_value;
-    //     struct node* next;
-    // };
-
-    //struct node* head=(struct node*)malloc(sizeof(struct node));
-    //head->move_value=nom;
-    // head->next=NULL;
-    //struct node* end=head;
+{
     int availableMoves = 0;
     if (nom == 6)
     {
